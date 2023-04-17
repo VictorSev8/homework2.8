@@ -37,15 +37,16 @@ public class DepartmentService {
                 .orElseThrow(() -> new RuntimeException("No such employee"));
     }
 
-    public List<Employee> getEmployeesOfDept(int deptNumber) {
+    public List<Employee> findEmployeeFromDepartment(int department) {
         return staff.stream()
-                .filter(e -> e.getDepartment() == deptNumber)
+                .filter(emp -> emp.getDepartment() == department)
                 .collect(Collectors.toList());
     }
 
-    public List<Employee> getStaffByDept() {
+    public List<Employee> findAllEmployeesFromDepartment() {
         return staff.stream()
                 .sorted(Comparator.comparingInt(Employee::getDepartment))
                 .collect(Collectors.toList());
+
     }
 }
