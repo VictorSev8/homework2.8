@@ -22,6 +22,22 @@ public class DepartmentService {
             new Employee("Ivan", "Chizhov", 2, 750.0),
             new Employee("Denis", "Krasnov", 2, 450.0)
     ));
+    private final ValidatorService validatorService;
+
+    public DepartmentService(ValidatorService validatorService) {
+        this.validatorService = validatorService;
+    }
+    public Employee add(String name,
+                        String surname,
+                        int dept,
+                        double salary) {
+        Employee employee = new Employee(validatorService.validateName(name),
+                validatorService.validateSurname(surname),
+                dept,
+                salary);
+    return employee;
+    }
+
 
     public Employee findMaxSalaryInDept(int deptNumber) {
         return staff.stream()
