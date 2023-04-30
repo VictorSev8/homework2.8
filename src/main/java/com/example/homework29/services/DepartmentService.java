@@ -1,5 +1,7 @@
 package com.example.homework29.services;
 
+import com.example.homework29.exceptions.IncorrectNameException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.example.homework29.model.Employee;
 
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
+//d
 @Service
 public class DepartmentService {
     private List<Employee> staff = new ArrayList<>(List.of(
@@ -22,6 +24,30 @@ public class DepartmentService {
             new Employee("Ivan", "Chizhov", 2, 750.0),
             new Employee("Denis", "Krasnov", 2, 450.0)
     ));
+    private final ValidatorService validatorService;
+
+    public DepartmentService(ValidatorService validatorService) {
+        this.validatorService = validatorService;
+    }
+    public Employee add(String name,
+                        String surname,
+                        int dept,
+                        double salary) {
+        if (!validateInput(name, surname)) {
+            throw new IncorrectNameException();
+        }
+        Employee employee = new Employee(validatorService.validateName(name),
+                validatorService.validateSurname(surname),
+                dept,
+                salary);
+    return employee;
+    }
+
+    private boolean validateInput(String name, String surname) {
+        return StringUtils.isAlpha(name) && StringUtils.isAlpha(surname);
+    }
+
+
 
     public Employee findMaxSalaryInDept(int deptNumber) {
         return staff.stream()
@@ -37,15 +63,16 @@ public class DepartmentService {
                 .orElseThrow(() -> new RuntimeException("No such employee"));
     }
 
-    public List<Employee> getEmployeesOfDept(int deptNumber) {
+    public List<Employee> findEmployeeFromDepartment(int department) {
         return staff.stream()
-                .filter(e -> e.getDepartment() == deptNumber)
+                .filter(emp -> emp.getDepartment() == department)
                 .collect(Collectors.toList());
     }
 
-    public List<Employee> getStaffByDept() {
+    public List<Employee> findAllEmployeesFromDepartment() {
         return staff.stream()
                 .sorted(Comparator.comparingInt(Employee::getDepartment))
                 .collect(Collectors.toList());
+
     }
 }

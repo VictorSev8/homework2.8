@@ -35,10 +35,12 @@ public class DepartmentController {
     }
 
     @GetMapping("/all")
-    public List<Employee> getEmployeesByDept(@RequestParam(value = "departmentId", required = false) Integer id) {
-        if (id != null) {
-            return service.getEmployeesOfDept(id);
+    public List<Employee> findEmployeeFromDepartment(@RequestParam(value = "departmentId", required = false) Integer department) {
+        if(department != null){
+            return service.findEmployeeFromDepartment(department);
+        } else {
+            return service.findAllEmployeesFromDepartment();
         }
-        return service.getStaffByDept();
+    }
     }
 }
