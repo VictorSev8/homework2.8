@@ -1,5 +1,7 @@
 package com.example.homework29.services;
 
+import com.example.homework29.exceptions.IncorrectNameException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import com.example.homework29.model.Employee;
 
@@ -31,12 +33,20 @@ public class DepartmentService {
                         String surname,
                         int dept,
                         double salary) {
+        if (!validateInput(name, surname)) {
+            throw new IncorrectNameException();
+        }
         Employee employee = new Employee(validatorService.validateName(name),
                 validatorService.validateSurname(surname),
                 dept,
                 salary);
     return employee;
     }
+
+    private boolean validateInput(String name, String surname) {
+        return StringUtils.isAlpha(name) && StringUtils.isAlpha(surname);
+    }
+
 
 
     public Employee findMaxSalaryInDept(int deptNumber) {
